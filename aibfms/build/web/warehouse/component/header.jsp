@@ -12,8 +12,8 @@
       <label style="font-size:1.3rem;font-weight:600;">Id: &nbsp; <%= warehouseUserId %></label>
     </span>
     <div class="ms-3 d-flex">
-      <a href="../index.jsp" class="btn btn-outline-light me-2">Back to login</a>
-      <a href="../logoutServlet" class="btn btn-outline-warning">Logout</a>
+      <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-light me-2">Back to login</a>
+      <a href="${pageContext.request.contextPath}/logoutServlet" class="btn btn-outline-warning">Logout</a>
     </div>
   </div>
 </nav>

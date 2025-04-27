@@ -1,6 +1,9 @@
 <%@ page import="enums.LoginType" %>
 <%
     String managementUserId = (String) session.getAttribute("managementUserId");
+    if(managementUserId == null) {
+      response.sendRedirect(request.getContextPath() + "/index.jsp");
+    }
 %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 
@@ -12,8 +15,8 @@
       <label style="font-size:1.3rem;font-weight:600;">Id: &nbsp; <%= managementUserId %></label>
     </span>
     <div class="ms-3 d-flex">
-      <a href="../index.jsp" class="btn btn-outline-light me-2">Back to login</a>
-      <a href="../logoutServlet" class="btn btn-outline-warning">Logout</a>
+      <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-outline-light me-2">Back to login</a>
+      <a href="${pageContext.request.contextPath}/logoutServlet" class="btn btn-outline-warning">Logout</a>
     </div>
   </div>
 </nav>

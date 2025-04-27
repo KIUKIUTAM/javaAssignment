@@ -3,6 +3,7 @@ package db.impl;
 import entity.Staff;
 import java.sql.*;
 import db.BaseDB;
+import java.util.List;
 
 public class StaffDB extends BaseDB {
     private String jdbcUrl;
@@ -24,6 +25,36 @@ public class StaffDB extends BaseDB {
         return executeQuerySingle(sql, this::mapStaff, userId);
     }
 
+    // Add a new staff user
+    public boolean addStaff(Staff staff) {
+        String sql = "INSERT INTO staff (user_id, name, password, role, store_id) VALUES (?, ?, ?, ?, ?)";
+        String hashedPassword = sha256(staff.getPassword());
+        return executeUpdate(sql, staff.getUserId(), staff.getName(), hashedPassword, staff.getRole(), staff.getStoreId());
+    }
+
+    public List<Staff> getAllStaff() {
+        String sql = "SELECT * FROM staff";
+        return executeQuery(sql, this::mapStaff);
+    }
+
+    public boolean editStaffRole(String userId, String role) {
+        String sql = "UPDATE staff SET role = ? WHERE user_id = ?";
+        return executeUpdate(sql, role, userId);
+    }
+
+    public boolean updateStaff(Staff staff) {
+        if (staff.getPassword() != null && !staff.getPassword().isEmpty()) {
+            // Update with new password
+            String sql = "UPDATE staff SET name = ?, password = ?, role = ?, store_id = ? WHERE user_id = ?";
+            String hashedPassword = sha256(staff.getPassword());
+            return executeUpdate(sql, staff.getName(), hashedPassword, staff.getRole(), staff.getStoreId(), staff.getUserId());
+        } else {
+            // Update without changing password
+            String sql = "UPDATE staff SET name = ?, role = ?, store_id = ? WHERE user_id = ?";
+            return executeUpdate(sql, staff.getName(), staff.getRole(), staff.getStoreId(), staff.getUserId());
+        }
+    }
+
     private String sha256(String password) {
         try {
             java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
@@ -39,6 +70,8 @@ public class StaffDB extends BaseDB {
             throw new RuntimeException(e);
         }
     }
+
+    
 
     private Staff mapStaff(ResultSet rs) throws SQLException {
         Staff staff = new Staff();

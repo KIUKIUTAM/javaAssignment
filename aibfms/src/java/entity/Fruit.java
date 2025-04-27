@@ -4,7 +4,10 @@ public class Fruit {
     private int id;
     private String fruitName;
     private int shelfLife;
-    private int cityId;
+    private String cityName;
+    private float usaWarehouseDistance;
+    private float japanWarehouseDistance;
+    private float hkWarehouseDistance;
 
     public int getId() {
         return id;
@@ -30,12 +33,36 @@ public class Fruit {
         this.shelfLife = shelfLife;
     }
 
-    public int getCityId() {
-        return cityId;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCityId(int city) {
-        this.cityId = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public float getUsaWarehouseDistance() {
+        return usaWarehouseDistance;
+    }
+
+    public void setUsaWarehouseDistance(float usaWarehouseDistance) {
+        this.usaWarehouseDistance = usaWarehouseDistance;
+    }
+
+    public float getJapanWarehouseDistance() {
+        return japanWarehouseDistance;
+    }
+
+    public void setJapanWarehouseDistance(float japanWarehouseDistance) {
+        this.japanWarehouseDistance = japanWarehouseDistance;
+    }
+
+    public float getHkWarehouseDistance() {
+        return hkWarehouseDistance;
+    }
+
+    public void setHkWarehouseDistance(float hkWarehouseDistance) {
+        this.hkWarehouseDistance = hkWarehouseDistance;
     }
 
     // getters and setters

@@ -9,8 +9,9 @@ public class FruitReserveRecord {
     private int state;
     private double quantity;
     private Date createDate;
-    private Date approveDate;
-    private Date DeliveryDate;
+    private Date arrivalDate;
+    private Double originToWarehouse;  // Using Double to allow null
+    private Double warehouseToStore;   // Using Double to allow null
 
     public int getId() {
         return id;
@@ -47,6 +48,7 @@ public class FruitReserveRecord {
     public double getQuantity() {
         return quantity;
     }
+
     public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
@@ -59,20 +61,28 @@ public class FruitReserveRecord {
         this.createDate = createDate;
     }
 
-    public Date getApproveDate() {
-        return approveDate;
+    public Date getArrivalDate() {
+        return arrivalDate;
     }
 
-    public void setApproveDate(Date approveDate) {
-        this.approveDate = approveDate;
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 
-    public Date getDeliveryDate() {
-        return DeliveryDate;
+    public Double getOriginToWarehouse() {
+        return originToWarehouse;
     }
 
-    public void setDeliveryDate(Date DeliveryDate) {
-        this.DeliveryDate = DeliveryDate;
+    public void setOriginToWarehouse(Double originToWarehouse) {
+        this.originToWarehouse = originToWarehouse;
+    }
+
+    public Double getWarehouseToStore() {
+        return warehouseToStore;
+    }
+
+    public void setWarehouseToStore(Double warehouseToStore) {
+        this.warehouseToStore = warehouseToStore;
     }
 
 }

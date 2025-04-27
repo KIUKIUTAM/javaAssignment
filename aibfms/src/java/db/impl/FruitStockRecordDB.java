@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import db.BaseDB;
+import java.util.Map;
 
 public class FruitStockRecordDB extends BaseDB {
     BakeryDB bakeryDB;
@@ -28,7 +29,7 @@ public class FruitStockRecordDB extends BaseDB {
     }
 
     public List<FruitStockRecord> getRecordsByBakeryId(int bakeryId) {
-        String sql = "SELECT * FROM fruit_stock_record WHERE bakery_id=?";
+        String sql = "SELECT * FROM fruit_stock_record WHERE bakery_id=? ";
         return executeQuery(sql, this::mapRecord, bakeryId);
     }
 
@@ -63,6 +64,15 @@ public class FruitStockRecordDB extends BaseDB {
                            record.getQuantityKg(), record.getExpiredDate(), 
                            record.getBorrowRecord(), record.getId());
     }
+
+    public List<Map<String, Object>> getRecordsGroupByFruitByBakeryId(int bakeryStoreId) {
+        String sql = "SELECT f.fruit_name,SUM(fs.quantity_kg) AS total_stock_kg FROM fruit_stock_record fs JOIN fruits f ON fs.fruit_id = f.id WHERE fs.bakery_id = ? GROUP BY f.fruit_name;";
+        return executeQueryToMapList(sql,bakeryStoreId );
+    }
+
+        
+
+
 
     public boolean deleteRecord(int id) {
         String sql = "DELETE FROM fruit_stock_record WHERE id=?";

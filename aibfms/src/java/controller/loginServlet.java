@@ -12,8 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import service.LoginService;
 import enums.LoginType;
+import java.util.Map;
+import service.BakeryStoreService;
 
 /**
  *
@@ -23,10 +26,11 @@ import enums.LoginType;
 public class loginServlet extends HttpServlet {
 
     LoginService loginService;
-
+    BakeryStoreService bakeryStoreService;
     @Override
     public void init() {
         loginService = new LoginService();
+        bakeryStoreService = new BakeryStoreService();
     }
 
     @Override
@@ -39,31 +43,34 @@ public class loginServlet extends HttpServlet {
         LoginType typeE = convertType(type);
         Staff staff = loginService.loginValidate(userId, rawPassword, typeE);
         if (staff != null) {
-            session.setMaxInactiveInterval(30 * 60);
+            session.setMaxInactiveInterval(60 * 60 * 24);
             switch (staff.getRole()) {
                 case "bakery" -> {
                     session.setAttribute("bakeryUserId", staff.getUserId());
-                    session.setAttribute("role", staff.getRole());
                     session.setAttribute("storeId", staff.getStoreId());
+                    session.setAttribute("country", bakeryStoreService.getCityByBakeryUserId(staff.getUserId()).get(0).get("country"));
+                    session.setAttribute("userInfo", bakeryStoreService.getCityByBakeryUserId(staff.getUserId()).get(0));
+                    
                     response.sendRedirect("bakery/bakeryHome.jsp");
-                    return;
                 }
                 case "warehouse" -> {
                     session.setAttribute("warehouseUserId", staff.getUserId());
-                    session.setAttribute("role", staff.getRole());
-                    response.sendRedirect("warehouse/warehouseHome.jsp");
-                    return;
+                    response.sendRedirect("warehouse/warehouseHome.jsp");                
                 }
                 case "management" -> {
                     session.setAttribute("managementUserId", staff.getUserId());
-                    session.setAttribute("role", staff.getRole());
-                    response.sendRedirect("management/managementHome.jsp");
-                    return;
+                    response.sendRedirect("management/managementHome.jsp");       
+                }
+                default ->{
+                    request.setAttribute("loginError", "Invalid credentials");
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
                 }
             }
         }
-        request.setAttribute("loginError", "Invalid credentials");
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        else{
+            request.setAttribute("loginError", "Invalid credentials");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        }
     }
 
     private enums.LoginType convertType(int type) {

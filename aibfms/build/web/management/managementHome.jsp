@@ -13,14 +13,22 @@
                 <!-- Sidebar -->
                 <div class="col-auto bg-light border-end" id="sidebar-wrapper" style="min-width: 200px; min-height: 100vh;">
                     <div class="p-3">
-                        <button class="btn btn-outline-primary w-100 mb-2" onclick="loadContent('home.jsp')">Home</button>
+                        <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/home.jsp')">Home</button>
+                        <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/fruitManagement.jsp')">Fruit Management</button>
+                        <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/acManage.jsp')">Account Management</button>
                     </div>
                 </div>
             
-                <div class="col flex-grow-1 p-3">
+                <div class="col flex-grow-1 p-3" id="content">
              
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+        function loadContent(url) {
+            $("#content").load(url);
+        }
+        </script>
     </body>
 </html>

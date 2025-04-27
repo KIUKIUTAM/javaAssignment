@@ -5,20 +5,18 @@ import entity.Fruit;
 import java.util.List;
 import java.util.Map;
 
-public class FruitService{
+public class FruitService {
     private FruitDB fruitDB;
     String jdbcUrl = "jdbc:mysql://localhost:3306/bakery_management?useSSL=false";
     String username = "root";
     String password = "root";
 
-
-
     public FruitService() {
         fruitDB = new FruitDB(jdbcUrl, username, password);
     }
 
-    public boolean create(Fruit entity) {
-        return fruitDB.addFruit(entity.getFruitName(), entity.getShelfLife(), entity.getCityId());
+    public boolean create(Fruit entity ) {
+        return fruitDB.addFruit(entity.getFruitName(), entity.getShelfLife(), entity.getCityName(), entity.getUsaWarehouseDistance(), entity.getJapanWarehouseDistance(), entity.getHkWarehouseDistance());
     }
 
     public Fruit read(int id) {
@@ -37,7 +35,7 @@ public class FruitService{
         return fruitDB.deleteFruit(id);
     }
 
-    public List<Map<String, Object>> getAllFruitsWithCity() {
-        return fruitDB.getAllFruitsWithCity();
+    public List<Map<String, Object>> getAllFruitsWithDetails() {
+        return fruitDB.getAllFruitsWithDetails();
     }
 }

@@ -16,7 +16,7 @@
     String bakeryUserId = (String) session.getAttribute("bakeryUserId");
 %>
 <!-- Modal Trigger Button -->
-<button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#borrowModal">Borrow Fruit</button>
+<button type="button" class="btn btn-success my-3" data-bs-toggle="modal" data-bs-target="#borrowModal">Borrow Fruit From Other Bakery</button>
 <div class="accordion mt-4" id="borrowAccordion">
   <!-- First Accordion: My Borrow Requests -->
   <div class="accordion-item">

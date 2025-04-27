@@ -3,10 +3,12 @@ package db.impl;
 import entity.FruitReserveRecord;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 import db.BaseDB;
+import java.util.Date;
 
 public class FruitReserveRecordDB extends BaseDB {
 
@@ -14,9 +16,13 @@ public class FruitReserveRecordDB extends BaseDB {
         super(jdbcUrl, username, password);
     }
 
-    public boolean addRecord(int fruitId, int bakeryId, int state, double quantity) {
+    public FruitReserveRecord addRecord(int fruitId, int bakeryId, int state, double quantity) {
         String sql = "INSERT INTO fruit_reserve_record (fruit_id, bakery_id, state, quantity) VALUES (?, ?, ?, ?)";
-        return executeUpdate(sql, fruitId, bakeryId, state, quantity);
+        if (executeUpdate(sql, fruitId, bakeryId, state, quantity)) {
+            String getLastRecordSql = "SELECT * FROM fruit_reserve_record WHERE fruit_id = ? AND bakery_id = ? ORDER BY id DESC LIMIT 1";
+            return executeQuerySingle(getLastRecordSql, this::mapRecord, fruitId, bakeryId);
+        }
+        return null;
     }
 
     public FruitReserveRecord getRecordById(int id) {
@@ -55,12 +61,28 @@ public class FruitReserveRecordDB extends BaseDB {
     }
 
     public boolean updateRecord(FruitReserveRecord record) {
-        String sql = "UPDATE fruit_reserve_record SET fruit_id=?, bakery_id=?, state=?, quantity=?"
-                + "approve_date=?, delivery_date=? WHERE id=?";
+        String sql = "UPDATE fruit_reserve_record SET fruit_id=?, bakery_id=?, state=?, quantity=? WHERE id=?";
         return executeUpdate(sql, record.getFruitId(), record.getBakeryId(), 
-                           record.getState(),record.getQuantity(), record.getApproveDate(), 
-                           record.getDeliveryDate(), record.getId());
+                           record.getState(), record.getQuantity(), record.getId());
     }
+
+
+    public boolean updateOriginToWarehouse(int id, double originToWarehouse) {
+        String sql = "UPDATE fruit_reserve_record SET origin_to_warehouse=? WHERE id=?";
+        return executeUpdate(sql, originToWarehouse, id);
+    }
+
+    public boolean updateWarehouseToStore(int id, double warehouseToStore) {
+        String sql = "UPDATE fruit_reserve_record SET warehouse_to_store=? WHERE id=?";
+        return executeUpdate(sql, warehouseToStore, id);
+    }
+
+    public boolean updateArrivalDate(int id, Date arrivalDate) {
+        String sql = "UPDATE fruit_reserve_record SET arrival_date=? WHERE id=?";
+        return executeUpdate(sql, arrivalDate, id);
+    }
+        
+
 
     private FruitReserveRecord mapRecord(ResultSet rs) throws SQLException {
         FruitReserveRecord record = new FruitReserveRecord();
@@ -70,8 +92,21 @@ public class FruitReserveRecordDB extends BaseDB {
         record.setState(rs.getInt("state"));
         record.setQuantity(rs.getDouble("quantity"));
         record.setCreateDate(rs.getTimestamp("create_date"));
-        record.setApproveDate(rs.getTimestamp("approve_date"));
-        record.setDeliveryDate(rs.getTimestamp("delivery_date"));
+        Timestamp arrivalDate = rs.getTimestamp("arrival_date");
+        if (arrivalDate != null) {
+            record.setArrivalDate(new Date(arrivalDate.getTime()));
+        }
+
+        double originToWarehouse = rs.getDouble("origin_to_warehouse");
+        if (!rs.wasNull()) {
+            record.setOriginToWarehouse(originToWarehouse);
+        }
+
+        double warehouseToStore = rs.getDouble("warehouse_ro_store");
+        if (!rs.wasNull()) {
+            record.setWarehouseToStore(warehouseToStore);
+        }
+        
         return record;
     }
 }

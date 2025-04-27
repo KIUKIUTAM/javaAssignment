@@ -1,1 +1,5 @@
-<h1>Hello World!</h1>
+<%@ taglib prefix="stock" uri="/WEB-INF/tld/stock" %>
+<%
+    String bakeryUserId = (String) session.getAttribute("bakeryUserId");
+%>
+<stock:stockTable bakeryUserId="<%= bakeryUserId %>" />

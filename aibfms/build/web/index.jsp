@@ -1,5 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="stock" uri="/WEB-INF/tld/stock" %>
 <html>
 <head>
     <title>System Login</title>
@@ -58,11 +59,11 @@
 <% } %>
 <div class="container login-container text-center">
     <h1 class="mb-5">Welcome to Acer International Bakery</h1>
-    <img src="resources/images/bread_Icon.webp"  alt="bread"/>
+    <img src="${pageContext.request.contextPath}/resources/images/bread_Icon.webp"  alt="bread"/>
     <div class="row justify-content-center">
         <div class="col-md-4">
             <% if (bakeryUserId != null) { %>
-                <button type="button" class="btn btn-primary login-btn" onclick="window.location.href='bakery/bakeryHome.jsp'">
+                <button type="button" class="btn btn-primary login-btn" onclick="window.location.href='${pageContext.request.contextPath}/bakery/bakeryHome.jsp'">
                     Bakery Shop Staff:<br> 
                     <%= bakeryUserId %>
                 </button>
@@ -74,7 +75,7 @@
         </div>
         <div class="col-md-4">
             <% if (warehouseUserId != null) { %>
-                <button type="button" class="btn btn-success login-btn" onclick="window.location.href='warehouse/warehouseHome.jsp'">
+                <button type="button" class="btn btn-success login-btn" onclick="window.location.href='${pageContext.request.contextPath}/warehouse/warehouseHome.jsp'">
                     Warehouse Staff:<br>
                     <%= warehouseUserId %>
                 </button>
@@ -86,7 +87,7 @@
         </div>
         <div class="col-md-4">
             <% if (managementUserId != null) { %>
-                <button type="button" class="btn btn-warning login-btn" onclick="window.location.href='management/managementHome.jsp'">
+                <button type="button" class="btn btn-warning login-btn" onclick="window.location.href='${pageContext.request.contextPath}/management/managementHome.jsp'">
                     Senior Management:<br>
                     <%= managementUserId %>
                 </button>
@@ -119,14 +120,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 <% } %>
-                <form action="loginServlet?type=1" method="post" onsubmit="return showLoginButtonLoading('bakery')">
+                <form action="${pageContext.request.contextPath}/loginServlet?type=1" method="post" onsubmit="return showLoginButtonLoading('bakery')">
                     <div class="mb-3">
                         <label for="bakeryUsername" class="form-label">Staff Id</label>
-                        <input type="text" class="form-control" id="bakeryUsername" name="userId" required>
+                        <input type="text" class="form-control" id="bakeryUsername" name="userId" value="ss123" required>
                     </div>
                     <div class="mb-3">
                         <label for="bakeryPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="bakeryPassword" name="password" required>
+                        <input type="password" class="form-control" id="bakeryPassword" name="password" value="password" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100" id="bakeryLoginBtn">Login</button>
                 </form>
@@ -155,14 +156,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 <% } %>
-                <form action="loginServlet?type=2" method="post" onsubmit="return showLoginButtonLoading('warehouse')">
+                <form action="${pageContext.request.contextPath}/loginServlet?type=2" method="post" onsubmit="return showLoginButtonLoading('warehouse')">
                     <div class="mb-3">
                         <label for="warehouseUsername" class="form-label">Staff Id</label>
-                        <input type="text" class="form-control" id="warehouseUsername" name="userId" required>
+                        <input type="text" class="form-control" id="warehouseUsername" name="userId" value="js123" required>
                     </div>
                     <div class="mb-3">
                         <label for="warehousePassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="warehousePassword" name="password" required>
+                        <input type="password" class="form-control" id="warehousePassword" name="password" value="password" required>
                     </div>
                     <button type="submit" class="btn btn-success w-100" id="warehouseLoginBtn">Login</button>
                 </form>
@@ -191,14 +192,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 <% } %>
-                <form action="loginServlet?type=3" method="post" onsubmit="return showLoginButtonLoading('management')">
+                <form action="${pageContext.request.contextPath}/loginServlet?type=3" method="post" onsubmit="return showLoginButtonLoading('management')">
                     <div class="mb-3">
                         <label for="managementUsername" class="form-label">Staff Id</label>
-                        <input type="text" class="form-control" id="managementUsername" name="userId" required>
+                        <input type="text" class="form-control" id="managementUsername" name="userId" value="admin" required>
                     </div>
                     <div class="mb-3">
                         <label for="managementPassword" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="managementPassword" name="password" required>
+                        <input type="password" class="form-control" id="managementPassword" name="password" value="password" required>
                     </div>
                     <button type="submit" class="btn btn-warning w-100" id="managementLoginBtn">Login</button>
                 </form>

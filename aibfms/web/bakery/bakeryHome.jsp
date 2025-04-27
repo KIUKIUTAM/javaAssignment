@@ -17,6 +17,7 @@
                         <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/reserve.jsp')">Reserve</button>
                         <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/storeStock.jsp')">Stock Level</button>
                         <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/borrow.jsp')">Borrow</button>
+                        <button class="btn btn-outline-primary w-100 mb-3" onclick="loadContent('./component/createUser.jsp')">Create User</button>
                     </div>
                 </div>
             
