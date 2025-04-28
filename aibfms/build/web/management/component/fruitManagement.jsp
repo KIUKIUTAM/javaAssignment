@@ -11,76 +11,7 @@
     String message = "";
     String alertType = "info";
     
-    // Process form submission
-    if (action != null) {
-        try {
-            if (action.equals("add") || action.equals("update")) {
-                String fruitName = request.getParameter("fruitName");
-                String shelfLifeStr = request.getParameter("shelfLife");
-                String cityName = request.getParameter("cityName");
-                String usaDistanceStr = request.getParameter("usaDistance");
-                String japanDistanceStr = request.getParameter("japanDistance");
-                String hkDistanceStr = request.getParameter("hkDistance");
-                
-                // Validate inputs
-                if (fruitName == null || fruitName.trim().isEmpty() ||
-                    shelfLifeStr == null || shelfLifeStr.trim().isEmpty() ||
-                    cityName == null || cityName.trim().isEmpty() ||
-                    usaDistanceStr == null || usaDistanceStr.trim().isEmpty() ||
-                    japanDistanceStr == null || japanDistanceStr.trim().isEmpty() ||
-                    hkDistanceStr == null || hkDistanceStr.trim().isEmpty()) {
-                    message = "All fields are required";
-                    alertType = "danger";
-                } else {
-                    int shelfLife = Integer.parseInt(shelfLifeStr);
-                    float usaDistance = Float.parseFloat(usaDistanceStr);
-                    float japanDistance = Float.parseFloat(japanDistanceStr);
-                    float hkDistance = Float.parseFloat(hkDistanceStr);
-                    
-                    boolean success = false;
-                    
-                    if (action.equals("add")) {
-                        Fruit fruit = new Fruit();
-                        fruit.setFruitName(fruitName);
-                        fruit.setShelfLife(shelfLife);
-                        fruit.setCityName(cityName);
-                        fruit.setUsaWarehouseDistance(usaDistance);
-                        fruit.setJapanWarehouseDistance(japanDistance);
-                        fruit.setHkWarehouseDistance(hkDistance);
-                        
-                        success = fruitService.create(fruit);
-                        message = success ? "Fruit added successfully" : "Failed to add fruit";
-                        alertType = success ? "success" : "danger";
-                    } else {
-                        int id = Integer.parseInt(request.getParameter("id"));
-                        Fruit fruit = new Fruit();
-                        fruit.setId(id);
-                        fruit.setFruitName(fruitName);
-                        fruit.setShelfLife(shelfLife);
-                        fruit.setCityName(cityName);
-                        fruit.setUsaWarehouseDistance(usaDistance);
-                        fruit.setJapanWarehouseDistance(japanDistance);
-                        fruit.setHkWarehouseDistance(hkDistance);
-                        
-                        success = fruitService.update(fruit);
-                        message = success ? "Fruit updated successfully" : "Failed to update fruit";
-                        alertType = success ? "success" : "danger";
-                    }
-                }
-            } else if (action.equals("delete")) {
-                int id = Integer.parseInt(request.getParameter("id"));
-                boolean success = fruitService.delete(id);
-                message = success ? "Fruit deleted successfully" : "Failed to delete fruit";
-                alertType = success ? "success" : "danger";
-            }
-        } catch (NumberFormatException e) {
-            message = "Invalid number format: " + e.getMessage();
-            alertType = "danger";
-        } catch (Exception e) {
-            message = "Error processing request: " + e.getMessage();
-            alertType = "danger";
-        }
-    }
+    
     
     // Get fruit for editing
     Fruit editFruit = null;
@@ -106,13 +37,7 @@
         message = "Error loading fruits: " + e.getMessage();
         alertType = "danger";
     }
-    
-    // Get sorting parameters
-    String sortField = request.getParameter("sort");
-    String sortDir = request.getParameter("dir");
-    
-    // Get search parameter
-    String searchQuery = request.getParameter("search");
+
 %>
 
 <!DOCTYPE html>
@@ -181,7 +106,7 @@
         
         <div class="form-container">
             <h4><%= editFruit == null ? "Add New Fruit" : "Edit Fruit" %></h4>
-            <form method="post" action="fruitManagement.jsp" id="fruitForm" class="needs-validation" novalidate>
+            <form method="post" action="${pageContext.request.contextPath}/fruitManagementServlet" id="fruitForm" class="needs-validation" novalidate>
                 <input type="hidden" name="action" value="<%= editFruit == null ? "add" : "update" %>">
                 <% if (editFruit != null) { %>
                     <input type="hidden" name="id" value="<%= editFruit.getId() %>">
@@ -248,7 +173,7 @@
                     </button>
                     
                     <% if (editFruit != null) { %>
-                        <a href="fruitManagement.jsp" class="btn btn-secondary">Cancel</a>
+                        <a href="${pageContext.request.contextPath}/fruitManagementServlet" class="btn btn-secondary">Cancel</a>
                     <% } %>
                     
                     <button type="reset" class="btn btn-outline-secondary">Reset</button>
@@ -259,11 +184,6 @@
         <div class="table-container">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Fruit List</h4>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-primary" id="refreshData">
-                        <i class="bi bi-arrow-clockwise"></i> Refresh
-                    </button>
-                </div>
             </div>
             
             <table id="fruitTable" class="table table-striped table-bordered">
@@ -290,8 +210,17 @@
                             <td><%= fruit.get("japan_warehouse_distance") %></td>
                             <td><%= fruit.get("hk_warehouse_distance") %></td>
                             <td class="action-buttons">
-                                <a href="fruitManagement.jsp?action=edit&id=<%= fruit.get("id") %>" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="fruitManagement.jsp?action=delete&id=<%= fruit.get("id") %>" class="btn btn-sm btn-danger" 
+                                <button class="btn btn-sm btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" 
+                                   data-id="<%= fruit.get("id") %>"
+                                   data-fruitname="<%= fruit.get("fruit_name") %>"
+                                   data-shelflife="<%= fruit.get("shelf_life") %>"
+                                   data-cityname="<%= fruit.get("city_name") %>"
+                                   data-usadistance="<%= fruit.get("usa_warehouse_distance") %>"
+                                   data-japandistance="<%= fruit.get("japan_warehouse_distance") %>"
+                                   data-hkdistance="<%= fruit.get("hk_warehouse_distance") %>">
+                                   Edit
+                                </button>
+                                <a href="${pageContext.request.contextPath}/fruitManagementServlet?action=delete&id=<%= fruit.get("id") %>" class="btn btn-sm btn-danger" 
                                    onclick="return confirm('Are you sure you want to delete this fruit?');">
                                    Delete
                                 </a>
@@ -303,42 +232,110 @@
         </div>
     </div>
     
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Fruit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="${pageContext.request.contextPath}/fruitManagementServlet" id="editModalForm" class="needs-validation" novalidate>
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="id" id="editId">
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editFruitName" class="form-label">Fruit Name</label>
+                                <input type="text" class="form-control" id="editFruitName" name="fruitName" required>
+                                <div class="invalid-feedback">
+                                    Please enter a fruit name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editShelfLife" class="form-label">Shelf Life (days)</label>
+                                <input type="number" class="form-control" id="editShelfLife" name="shelfLife" min="1" max="365" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid shelf life (1-365 days).
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editCityName" class="form-label">City Name</label>
+                            <input type="text" class="form-control" id="editCityName" name="cityName" required>
+                            <div class="invalid-feedback">
+                                Please enter a city name.
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="editUsaDistance" class="form-label">USA Warehouse Distance</label>
+                                <input type="number" step="0.01" class="form-control" id="editUsaDistance" name="usaDistance" min="0" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid distance.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editJapanDistance" class="form-label">Japan Warehouse Distance</label>
+                                <input type="number" step="0.01" class="form-control" id="editJapanDistance" name="japanDistance" min="0" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid distance.
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="editHkDistance" class="form-label">Hong Kong Warehouse Distance</label>
+                                <input type="number" step="0.01" class="form-control" id="editHkDistance" name="hkDistance" min="0" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid distance.
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveChanges">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
-            // Initialize DataTable with export buttons
-            var table = $('#fruitTable').DataTable({
+    
+            $('#fruitTable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    {
-                        extend: 'copy',
-                        className: 'btn btn-sm btn-outline-secondary'
-                    },
-                    {
-                        extend: 'csv',
-                        className: 'btn btn-sm btn-outline-secondary'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'btn btn-sm btn-outline-secondary'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn btn-sm btn-outline-secondary'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'btn btn-sm btn-outline-secondary'
-                    }
-                ],
-                responsive: true,
-                ordering: true,
-                searching: true,
-                paging: true,
-                pageLength: 10,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+   
+            $('.edit-btn').on('click', function() {
+                var id = $(this).data('id');
+                var fruitName = $(this).data('fruitname');
+                var shelfLife = $(this).data('shelflife');
+                var cityName = $(this).data('cityname');
+                var usaDistance = $(this).data('usadistance');
+                var japanDistance = $(this).data('japandistance');
+                var hkDistance = $(this).data('hkdistance');
+                
+           
+                $('#editId').val(id);
+                $('#editFruitName').val(fruitName);
+                $('#editShelfLife').val(shelfLife);
+                $('#editCityName').val(cityName);
+                $('#editUsaDistance').val(usaDistance);
+                $('#editJapanDistance').val(japanDistance);
+                $('#editHkDistance').val(hkDistance);
             });
             
-            // Client-side form validation
+            $('#saveChanges').on('click', function() {
+                $('#editModalForm').submit();
+            });
+            
             (function() {
                 'use strict';
                 
@@ -355,21 +352,6 @@
                     }, false);
                 });
             })();
-            
-            // Refresh button functionality
-            $('#refreshData').click(function() {
-                window.location.href = 'fruitManagement.jsp';
-            });
-            
-            // Highlight table rows on hover
-            $('#fruitTable tbody').on('mouseenter', 'tr', function() {
-                $(this).addClass('table-active');
-            }).on('mouseleave', 'tr', function() {
-                $(this).removeClass('table-active');
-            });
-            
-            // Show alert messages then fade out after 5 seconds
-            $('.alert').delay(5000).fadeOut(500);
         });
     </script>
 </body>

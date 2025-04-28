@@ -138,20 +138,20 @@
                         </div>
                         <small class="form-text text-muted">Leave empty to keep current password</small>
                     </div>
-                    <div class="mb-3">
-                        <label for="editRole" class="form-label">角色</label>
-                        <select class="form-control" id="editRole" name="role" onchange="toggleStoreField('edit')" required>
-                            <option value="">選擇角色</option>
-                            <option value="management">Management</option>
-                            <option value="warehouse">Warehouse</option>
-                            <option value="bakery">Bakery</option>
+		<div class="mb-3">
+			<label for="editRole" class="form-label">role</label>
+			<select class="form-control" id="editRole" name="role" onchange="toggleStoreField('edit')" required>
+				<option value="">Choose a role</option>
+				<option value="management">Management</option>
+				<option value="warehouse">Warehouse</option>
+				<option value="bakery">Bakery</option>
                             <option value="none">None</option>
                         </select>
                     </div>
                     <div class="mb-3" id="editStoreField" style="display: none;">
-                        <label for="editStoreId" class="form-label">商店</label>
+                        <label for="editStoreId" class="form-label">store</label>
                         <select class="form-control" id="editStoreId" name="storeId">
-                            <option value="">選擇商店</option>
+                            <option value="">Choose a store</option>
                             <% for(Bakery bakery : bakeries) { %>
                                 <option value="<%= bakery.getId() %>"><%= bakery.getName() %></option>
                             <% } %>
@@ -208,7 +208,6 @@ function handleAddStaff(event) {
     const form = document.getElementById('addStaffForm');
     const formData = $(form).serialize();
     
-    // 如果角色不是 bakery，確保 storeId 為空
     if ($('#addRole').val() !== 'bakery') {
         $('#addStoreId').val('');
     }
@@ -251,7 +250,7 @@ function editStaff(userId) {
                 $('#editName').val(response.data.name);
                 $('#editRole').val(response.data.role);
                 $('#editStoreId').val(response.data.storeId);
-                toggleStoreField('edit'); // 根據角色顯示/隱藏商店欄位
+                toggleStoreField('edit'); 
                 $('#editStaffModal').modal('show');
             } else {
                 showToast('Error', response.message);
@@ -268,7 +267,6 @@ function handleEditStaff(event) {
     const form = document.getElementById('editStaffForm');
     const formData = $(form).serialize();
     
-    // 如果角色不是 bakery，確保 storeId 為空
     if ($('#editRole').val() !== 'bakery') {
         $('#editStoreId').val('');
     }

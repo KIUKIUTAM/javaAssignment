@@ -1,8 +1,6 @@
 <%
     String bakeryUserId = (String) session.getAttribute("bakeryUserId");
     Object country = session.getAttribute("country");
-    Object userInfo = session.getAttribute("userInfo");
-    String cou =  userInfo.toString();
     
     if(bakeryUserId == null) {
         response.sendRedirect("../index.jsp");

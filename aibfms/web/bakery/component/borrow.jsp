@@ -77,7 +77,7 @@
               <th>ID</th>
               <th>Stock ID</th>
               <th>Bakery ID</th>
-              <th>Borrowed From Bakery ID</th>
+              <th>Borrowed From Bakery ID (our store)</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -91,7 +91,7 @@
               <td><%= row.getBorrowBakeryId() %></td>
               <td>
                   <button class="btn btn-success btn-sm" onclick="approveBorrowRequest(<%= row.getId() %>, <%= row.getBakeryId() %>)">Approve</button>
-                  <button class="btn btn-danger btn-sm" onclick="rejectBorrowRequest(<%= row.getId() %>, <%= row.getBakeryId() %>)">Reject</button>
+                  <button class="btn btn-danger btn-sm" onclick="rejectBorrowRequest(<%= row.getId() %>)">Reject</button>
               </td>
             </tr>
           <% } %>
@@ -184,7 +184,7 @@ function borrowFruit(stockId, borrowBakeryId) {
     
 }
 
-function approveBorrowRequest(borrowId, bakeryStoreId) {
+function approveBorrowRequest(borrowId, ownBakeryId) {
   if(!confirm('approve this borrow request?')) return;
   var contextPath = '<%= request.getContextPath() %>';
   var bakeryUserId = '<%= bakeryUserId != null ? bakeryUserId : "" %>';
@@ -193,7 +193,7 @@ function approveBorrowRequest(borrowId, bakeryStoreId) {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ 
       borrowId: borrowId,
-      bakeryStoreId : bakeryStoreId,
+      ownBakeryId : ownBakeryId,
       state: 1
      })
   })
@@ -222,7 +222,6 @@ function rejectBorrowRequest(borrowId) {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ 
-      bakeryUserId: '<%= (String)session.getAttribute("bakeryUserId") %>',
       borrowId: borrowId,
       state: 2
      })

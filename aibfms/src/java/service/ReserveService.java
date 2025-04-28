@@ -108,6 +108,10 @@ public class ReserveService {
         }
     }
 
+    public boolean updateReserveRecordByCountry(int id, int state, String country) {
+        return reserveDB.updateRecordByCountry(id, state, country);
+    }
+
     public boolean deleteReserveRecord(int id) {
         return reserveDB.deleteRecord(id);
     }
@@ -120,7 +124,14 @@ public class ReserveService {
         return reserveDB.getRecordById(id);
     }
 
+    public boolean approveAllCountryOrders(String country) {
+        
+        return reserveDB.approveAllCountryOrders(country);
+    }
 
+    public List<Map<String, Object>> getRecordsByCountry(String country) {
+        return reserveDB.getRecordsByCountry(country);
+    }
 
 
     private Date expiredDateCal(int fruitId){

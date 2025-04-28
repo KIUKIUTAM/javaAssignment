@@ -49,7 +49,6 @@ public class loginServlet extends HttpServlet {
                     session.setAttribute("bakeryUserId", staff.getUserId());
                     session.setAttribute("storeId", staff.getStoreId());
                     session.setAttribute("country", bakeryStoreService.getCityByBakeryUserId(staff.getUserId()).get(0).get("country"));
-                    session.setAttribute("userInfo", bakeryStoreService.getCityByBakeryUserId(staff.getUserId()).get(0));
                     
                     response.sendRedirect("bakery/bakeryHome.jsp");
                 }

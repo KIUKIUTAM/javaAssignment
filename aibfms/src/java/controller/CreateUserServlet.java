@@ -53,9 +53,9 @@ public class CreateUserServlet extends HttpServlet {
         request.setAttribute("message", msg);
         String forwardJsp;
         if ("bakery".equalsIgnoreCase(role)) {
-            forwardJsp = request.getContextPath() + "/bakery/component/userCreated.jsp";
+            forwardJsp = "/bakery/component/userCreated.jsp";
         } else {
-            forwardJsp = request.getContextPath() + "/warehouse/component/userCreated.jsp";
+            forwardJsp = "/warehouse/component/userCreated.jsp";
         }
         request.getRequestDispatcher(forwardJsp).forward(request, response);
         return;
@@ -63,11 +63,11 @@ public class CreateUserServlet extends HttpServlet {
             request.setAttribute("message", e.getMessage());
             String forwardJsp;
             if ("bakery".equalsIgnoreCase(role)) {
-                forwardJsp = request.getContextPath() + "/bakery/component/userCreated.jsp";
+                forwardJsp = "/bakery/component/userCreated.jsp";
             } else if("warehouse".equalsIgnoreCase(role)){
-                forwardJsp = request.getContextPath() + "/warehouse/component/userCreated.jsp";
+                forwardJsp = "/warehouse/component/userCreated.jsp";
             }else{
-                forwardJsp = request.getContextPath() + "/index.jsp";
+                forwardJsp = "/index.jsp";
             }
             request.getRequestDispatcher(forwardJsp).forward(request, response);
             return;

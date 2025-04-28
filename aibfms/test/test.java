@@ -1,4 +1,5 @@
 
+import db.impl.FruitReserveRecordDB;
 import java.util.List;
 
 import service.BorrowService;
@@ -25,15 +26,18 @@ public class test {
         String jdbcUrl = "jdbc:mysql://localhost:3306/bakery_management";
         String user = "root";
         String password = "root";
+        FruitReserveRecordDB fruitReserveRecordDB = new FruitReserveRecordDB(jdbcUrl,user,password);
+        List<Map<String,Object>> fruitReserveRecords = fruitReserveRecordDB.getRecordsByCountry("Hong Kong");
+        System.out.println(fruitReserveRecords);
 //        BorrowService borrowService = new BorrowService(jdbcUrl,user,password);
 //        System.out.println(borrowService.updateRecordStateById(2,2));
 //        StaffDB staffDB = new StaffDB(jdbcUrl,user,password);
 //        List<Staff> staffList = staffDB.getAllStaff();
 //        System.out.println(staffList);
 //        List<Bakery> bakeryList = new BakeryStoreService().getAllBakeries();
-        StockService stockSerice = new StockService();
-        List<Map<String,Object>> stockRecords = stockSerice.getStockRecordsGroupByFruitByBakeryId("ss123");
-        System.out.println(stockRecords);
-        System.out.println(System.currentTimeMillis());
+//        StockService stockSerice = new StockService();
+//        List<Map<String,Object>> stockRecords = stockSerice.getStockRecordsGroupByFruitByBakeryId("ss123");
+//        System.out.println(stockRecords);
+//        System.out.println(System.currentTimeMillis());
     }
 }

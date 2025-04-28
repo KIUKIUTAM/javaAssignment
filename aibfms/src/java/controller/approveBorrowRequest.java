@@ -34,7 +34,7 @@ public class approveBorrowRequest extends HttpServlet {
 
             String borrowIdParam = request.getParameter("borrowId");
             String stateParam = request.getParameter("state");
-            int bakeryStoreId = Integer.parseInt(request.getParameter("bakeryStoreId"));
+            
             if (borrowIdParam == null || stateParam == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.getWriter().write("{\"success\": false, \"message\": \"Missing required parameters\"}");
@@ -52,8 +52,9 @@ public class approveBorrowRequest extends HttpServlet {
 
             boolean updated = borrowService.updateRecordStateById(borrowId, state);
             if (state == 1) {
+                int ownBakeryId = Integer.parseInt(request.getParameter("ownBakeryId"));
                 int stockId = borrowService.getRecordById(borrowId).getStockId();
-                borrowService.updateStockBorrowId(stockId, bakeryStoreId);
+                borrowService.updateStockBorrowId(stockId, ownBakeryId);
             }
             if (updated) {
                 response.getWriter().write("{\"success\": true, \"message\": \"Borrow request updated successfully.\"}");

@@ -65,7 +65,7 @@
                         <%= String.format("%.1f km", japanDist) %>
                       </span>
                     </td>
-                  <% } else if ("HK".equals(country)) { origin_to_warehouse = hkDist; %>
+                  <% } else if ("Hong Kong".equals(country)) { origin_to_warehouse = hkDist; %>
                     <td>
                       <span class="badge bg-info">
                         <%= String.format("%.1f km", hkDist) %>
@@ -90,7 +90,7 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          My Reserve Records (Arrived at bakery store)
+          My Reserve Records
         </button>
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#fruitAccordion">

@@ -28,9 +28,21 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+        loadContent('./component/home.jsp')
         function loadContent(url) {
             $("#content").load(url);
         }
+        </script>
+        <script>
+            $(document).ready(function() {
+            
+                const urlParams = new URLSearchParams(window.location.search);
+                const loadComp = urlParams.get('loadComponent');
+                
+                if (loadComp) {
+                    loadContent('./component/' + loadComp + '.jsp');
+                }
+            });
         </script>
     </body>
 </html>

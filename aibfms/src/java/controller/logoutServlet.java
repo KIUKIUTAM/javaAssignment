@@ -18,6 +18,7 @@ public class logoutServlet extends HttpServlet {
             session.removeAttribute("bakeryUserId");
             session.removeAttribute("warehouseUserId");
             session.removeAttribute("managementUserId");
+            session.removeAttribute("country");
             session.invalidate();
         }
         response.sendRedirect(request.getContextPath() + "/index.jsp");

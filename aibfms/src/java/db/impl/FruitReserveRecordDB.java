@@ -81,6 +81,21 @@ public class FruitReserveRecordDB extends BaseDB {
         String sql = "UPDATE fruit_reserve_record SET arrival_date=? WHERE id=?";
         return executeUpdate(sql, arrivalDate, id);
     }
+
+    public boolean approveAllCountryOrders(String country) {
+        String sql = "UPDATE fruit_reserve_record SET state=? WHERE country = ? AND state = 0";
+        return executeUpdate(sql, 2, country);
+    }
+
+    public List<Map<String, Object>> getRecordsByCountry(String country) {
+        String sql = "SELECT fr.id, fruit_id , fruit_name, bakery_id, state, quantity, create_date , arrival_date , origin_to_warehouse, country   FROM fruit_reserve_record fr, bakery b,cities c, fruits f WhERE fr.bakery_id = b.id AND b.city_id = c.id AND fr.fruit_id = f.id AND country = ? ;";
+        return executeQueryToMapList(sql, country);
+    }
+
+    public boolean updateRecordByCountry(int id, int state, String country) {
+        String sql = "UPDATE fruit_reserve_record f, bakery b, cities c SET f.state=? WHERE f.bakery_id = b.id AND b.city_id = c.id AND  f.id= ? AND c.country = ?";
+        return executeUpdate(sql, state, id, country);
+    }
         
 
 

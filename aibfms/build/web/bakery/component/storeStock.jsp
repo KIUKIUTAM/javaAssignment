@@ -60,49 +60,6 @@
                 </h5>
             </div>
             <div class="card-body">
-                <!-- Advanced Search Section -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header bg-secondary text-white">
-                                <i class="fas fa-search me-2"></i>Advanced Search
-                            </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label">Fruit ID</label>
-                                        <input type="text" class="form-control search-input" data-column="1" placeholder="Search Fruit ID">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Quantity Range</label>
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" id="quantityMin" placeholder="Min">
-                                            <span class="input-group-text">-</span>
-                                            <input type="number" class="form-control" id="quantityMax" placeholder="Max">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Status</label>
-                                        <select class="form-select search-input" data-column="3">
-                                            <option value="">All</option>
-                                            <option value="Active">Active</option>
-                                            <option value="Expired">Expired</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label">Date Range</label>
-                                        <div class="input-group">
-                                            <input type="date" class="form-control" id="dateStart">
-                                            <span class="input-group-text">-</span>
-                                            <input type="date" class="form-control" id="dateEnd">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Summary Cards -->
                 <div class="row mb-4">
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -184,83 +141,48 @@
 
     <script>
         $(document).ready(function() {
-            // Initialize DataTable with advanced features
             var table = $('#stockTable').DataTable({
                 responsive: true,
                 order: [[0, 'desc']],
+                searching: true,
                 pageLength: 10,
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'excel', 'pdf', 'print'
                 ],
                 language: {
-                    search: "Quick Search:",
                     lengthMenu: "Show _MENU_ entries per page",
                     info: "Showing _START_ to _END_ of _TOTAL_ stock records",
                     paginate: {
                         first: "First",
                         last: "Last",
                         next: "Next",
-                        previous: "Previous"
+                        previous: "Previous" 
                     }
                 }
             });
 
-            // Individual column search
+
             $('.search-input').on('keyup change', function() {
                 var column = $(this).data('column');
                 var value = $(this).val();
                 table.column(column).search(value).draw();
             });
 
-            // Quantity range search
-            $('#quantityMin, #quantityMax').on('change', function() {
-                var min = parseFloat($('#quantityMin').val()) || 0;
-                var max = parseFloat($('#quantityMax').val()) || Infinity;
-                
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                    var quantity = parseFloat(data[2]) || 0;
-                    return (quantity >= min && quantity <= max);
-                });
-                
-                table.draw();
-            });
-
-            // Date range search
-            $('#dateStart, #dateEnd').on('change', function() {
-                var start = $('#dateStart').val();
-                var end = $('#dateEnd').val();
-                
-                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                    var date = new Date(data[4]);
-                    var startDate = start ? new Date(start) : null;
-                    var endDate = end ? new Date(end) : null;
-                    
-                    if (!startDate && !endDate) return true;
-                    if (startDate && date < startDate) return false;
-                    if (endDate && date > endDate) return false;
-                    return true;
-                });
-                
-                table.draw();
-            });
-
-            // Clear all filters
+        
             $('#clearFilters').on('click', function() {
                 $('.search-input').val('');
-                $('#quantityMin, #quantityMax').val('');
-                $('#dateStart, #dateEnd').val('');
                 table.search('').columns().search('').draw();
             });
         });
 
         function viewDetails(stockId) {
-            // 實現查看詳情的功能
+          
             alert('Viewing details for stock ID: ' + stockId);
         }
 
         function editStock(stockId) {
-            // 實現編輯庫存的功能
+    
             alert('Editing stock ID: ' + stockId);
         }
     </script>
@@ -274,5 +196,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
+
+
 </body>
 </html>

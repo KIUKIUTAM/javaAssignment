@@ -49,7 +49,9 @@ public class BorrowService {
 
     public void updateStockBorrowId(int stockId, int storeId) {
         FruitStockRecord record = stockDB.getRecordById(stockId);
-        record.setBorrowRecord(storeId);
+        int orgId = record.getBakeryId();
+        record.setBorrowRecord(orgId);
+        record.setBakeryId(storeId);
         stockDB.updateRecord(record);
     }
 

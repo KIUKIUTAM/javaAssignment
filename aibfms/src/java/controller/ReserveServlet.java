@@ -73,6 +73,41 @@ public class ReserveServlet extends HttpServlet {
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
                 int state = Integer.parseInt(request.getParameter("state"));
+                String country = request.getParameter("country");
+                boolean success = reserveService.updateReserveRecordByCountry(id, state, country); 
+                if (success) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    out.print("{\"success\":true,\"message\":\"Order confirmed successfully.\"}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"success\":false,\"message\":\"Failed to confirm order.\"}");
+                }
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"success\":false,\"message\":\"Error2: " + e.getMessage() + "\"}");
+            } finally {
+                out.flush();
+                out.close();
+            }
+        } else if ("approveAllCountryOrders".equals(action)) {
+            try {
+                String country = request.getParameter("country");
+                boolean success = reserveService.approveAllCountryOrders(country);
+                if (success) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    out.print("{\"success\":true,\"message\":\"All orders approved successfully.\"}");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.print("{\"success\":false,\"message\":\"Failed to approve all orders.\"}");
+                }
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.print("{\"success\":false,\"message\":\"Error3: " + e.getMessage() + "\"}");
+            }
+        } else if ("updateState1".equals(action)) {
+            try {
+                int id = Integer.parseInt(request.getParameter("id"));
+                int state = Integer.parseInt(request.getParameter("state"));
                 boolean success = reserveService.updateReserveRecord(id, state); 
                 if (success) {
                     response.setStatus(HttpServletResponse.SC_OK);
